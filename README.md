@@ -37,4 +37,5 @@ The repository is organized as follows:
    docker build -t flask-app .
 
 2. **Run the Docker image to create container**:
+   ```bash
    docker run -p 5000:5000 flask-app
