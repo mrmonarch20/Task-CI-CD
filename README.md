@@ -3,6 +3,12 @@
 
 This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
 
+
+## Clone the repository
+
+```bash
+   git clone https://github.com/mrmonarch20/Task-CI-CD.git
+
 ## Project Structure
 
 The repository is organized as follows:
@@ -39,6 +45,13 @@ The repository is organized as follows:
 2. **Run the Docker image to create container**:
    ```bash
    docker run -p 5000:5000 flask-app
+
+
+3. **You can pull the docker image
+   ```bash
+   docker pull raja7977/app
+
+   Note: Docker image pushed to docker hub public repository
 
 
    ###Terraform Infrastructure Setup###
@@ -136,4 +149,34 @@ Once the infrastructure is deployed, verify the resources in the AWS Management 
 
 VPC: Check the created VPC, subnets, and NAT Gateway.
 EKS Cluster: Verify the EKS cluster and worker nodes.
+
+## Step7: Deploy the appliaction into eks cluster and then access it via loadbalancer url
+
+ Files stored in terraform directory
+
+simply apply them
+```bash
+ kubectl apply -f deployement.yaml
+kubectl apply -f service.yaml
+
+After that, fetch the URL, simply by typing this
+
+```bash
+kubectl get svc
+ you will get
+```bash
+NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+simpletime-service    LoadBalancer   10.100.200.200  a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com  80:30777/TCP   10m
+
+ paste it in the web browser, you will get the json response.
+
+```bash
+### -------------------------------------------------------------------------------
+{
+  "timestamp": "2025-04-14T21:15:43.000000+05:30",
+  "ip": "127.0.0.1"
+}
+###----------------------------------------------------------------------------------
+
+
 
