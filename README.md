@@ -4,7 +4,7 @@
 This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
 
 
-## Clone the repository
+*** Clone the repository
 
 ```bash
    git clone https://github.com/mrmonarch20/Task-CI-CD.git
