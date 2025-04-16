@@ -1,116 +1,146 @@
-# Task-CI-CD
-# Task-CI-CD Repository
-
-This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
-
-
-*** Clone the repository
-
-```bash
-   git clone https://github.com/mrmonarch20/Task-CI-CD.git
-
-## Project Structure
-
+Task-CI-CD Repository
+This repository contains a Flask application with a CI/CD pipeline, Docker containerization, and Terraform infrastructure setup for deployment on AWS EKS. Below is a comprehensive guide to the project structure, setup, and deployment process.
+Project Structure
 The repository is organized as follows:
+Task-CI-CD/
+├── app/
+│   ├── app.py              # Main Flask application code
+│   ├── requirements.txt    # Python dependencies for the application
+│   └── Dockerfile          # Dockerfile for containerizing the Flask app
+├── terraform/
+│   ├── main.tf             # Terraform configuration for VPC, EKS, and other resources
+│   ├── backend.tf          # Remote backend configuration for Terraform state
+│   ├── deployment.yaml     # Kubernetes deployment manifest for the Flask app
+│   └── service.yaml        # Kubernetes service manifest for LoadBalancer
+└── README.md               # Project documentation
 
-## Steps Performed in This Repository
+Steps Performed in This Repository
 
-1. **Created the `app` Directory**:
-   - All application-related files are stored in the `app` directory for better organization.
+Created the app Directory:
 
-2. **Added the `app.py` File**:
-   - This file contains the main Flask application code.
-
-3. **Created the `requirements.txt` File**:
-   - This file lists the Python dependencies required for the application:
-     ```
-     Flask==2.3.3
-     pytz==2024.1
-     ```
-
-4. **Built a Docker Image**:
-   - A `Dockerfile` was created to containerize the Flask application. The Docker image ensures the application runs consistently across different environments.
-
-## How to Run the Application
-
-### Prerequisites
-- Install [Docker](https://www.docker.com/).
-
-### Steps to Run
-1. **Build the Docker Image**:
-   Run the following command in the terminal:
-   ```bash
-   docker build -t flask-app .
-
-2. **Run the Docker image to create container**:
-   ```bash
-   docker run -p 5000:5000 flask-app
+Contains all application-related files for better organization.
 
 
-3. **You can pull the docker image
-   ```bash
-   docker pull raja7977/app
+Developed the app.py File:
 
-   Note: Docker image pushed to docker hub public repository
+Implements the Flask application logic.
 
 
-   ###Terraform Infrastructure Setup###
+Added the requirements.txt File:
 
-This guide explains how to set up the Terraform infrastructure for the project, including installing the required tools, configuring the AWS CLI, setting up a remote backend, and deploying the infrastructure.
+Lists Python dependencies:
+Flask==2.3.3
+pytz==2024.1
 
----
 
-## Prerequisites
 
-1. **AWS CLI**: Ensure the AWS CLI is installed and configured.
-2. **Terraform**: Install Terraform CLI.
-3. **AWS Account**: You need an AWS account with sufficient permissions to create resources.
 
----
+Built a Docker Image:
 
-## Step 1: Install AWS CLI and Terraform
+Created a Dockerfile to containerize the Flask application for consistent environments.
 
-### Install AWS CLI
-Follow the [AWS CLI installation guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) for your operating system.
 
-Verify the installation:
-```bash
+Terraform Infrastructure Setup:
+
+Configured AWS resources (VPC, EKS cluster, etc.) using Terraform.
+Set up a remote S3 backend for Terraform state management.
+
+
+Deployed to EKS:
+
+Deployed the Flask application to an EKS cluster using Kubernetes manifests.
+
+
+
+How to Run the Application Locally
+Prerequisites
+
+Docker installed.
+
+Steps to Run
+
+Clone the Repository:
+git clone https://github.com/mrmonarch20/Task-CI-CD.git
+cd Task-CI-CD
+
+
+Build the Docker Image:
+docker build -t flask-app ./app
+
+
+Run the Docker Container:
+docker run -p 5000:5000 flask-app
+
+
+Access the Application:
+
+Open http://localhost:5000 in a web browser to see the Flask app response.
+
+
+Optional: Pull Docker Image:
+
+Pull the pre-built image from Docker Hub:
+docker pull raja7977/app
+
+
+
+
+
+Terraform Infrastructure Setup
+This section explains how to set up and deploy the AWS infrastructure using Terraform for hosting the Flask application on an EKS cluster.
+Prerequisites
+
+AWS CLI installed and configured.
+Terraform CLI installed.
+An AWS account with permissions to create resources (VPC, EKS, S3, etc.).
+kubectl installed for EKS deployment.
+
+Step 1: Install and Verify Tools
+
+Install AWS CLI:
+
+Follow the AWS CLI installation guide.
+
+Verify installation:
 aws --version
 
 
-Install Terraform.  ---> Verify Installation
 
-```bash
+
+Install Terraform:
+
+Follow the Terraform installation guide.
+
+Verify installation:
 terraform -version
 
-## Step 2: Configure AWS CLI
 
-```bash
+
+
+
+Step 2: Configure AWS CLI
+Configure your AWS credentials:
 aws configure
+
+Provide:
+
 AWS Access Key ID
 AWS Secret Access Key
 Default region (e.g., ap-south-1)
 Default output format (e.g., json)
 
-## Step 3: Set Up the Remote Backend
+Step 3: Set Up the Remote Backend
 
-Create an S3 Bucket for Remote Backend
-Run the following commands to create an S3 bucket for storing the Terraform state file:
-
-```bash
+Create an S3 Bucket:
 aws s3api create-bucket --bucket <your-bucket-name> --region ap-south-1 --create-bucket-configuration LocationConstraint=ap-south-1
 
-Replace <your-bucket-name> with a unique name for your bucket.
+Replace <your-bucket-name> with a unique bucket name.
 
-Enable versioning for the bucket:
-
-```bash
+Enable Versioning:
 aws s3api put-bucket-versioning --bucket <your-bucket-name> --versioning-configuration Status=Enabled
 
 
-Configure the Remote Backend
-Update the backend.tf file to configure the remote backend:
-
+Configure Remote Backend: Update terraform/backend.tf:
 terraform {
   backend "s3" {
     bucket         = "<your-bucket-name>"
@@ -120,63 +150,64 @@ terraform {
   }
 }
 
- ## Step 4: Initialize Terraform
+
+
+Step 4: Initialize Terraform
 Navigate to the terraform directory:
-
-
-```bash
 cd terraform
 
-Initialize Terraform to download the required providers and configure the backend:
-```bash
+Initialize Terraform:
 terraform init
 
-## Step 5: Deploy the Infrastructure
-Plan the Infrastructure
-Run the following command to see the changes Terraform will make:
+Step 5: Deploy the Infrastructure
 
-```bash
+Plan the Infrastructure:
 terraform plan
 
-Apply the Infrastructure
-Deploy the infrastructure:
 
-```bash
+Apply the Infrastructure:
 terraform apply -auto-approve
 
-## Step 6: Verify the Infrastructure
-Once the infrastructure is deployed, verify the resources in the AWS Management Console:
 
-VPC: Check the created VPC, subnets, and NAT Gateway.
-EKS Cluster: Verify the EKS cluster and worker nodes.
 
-## Step7: Deploy the appliaction into eks cluster and then access it via loadbalancer url
+Step 6: Verify the Infrastructure
+Check the AWS Management Console for:
 
- Files stored in terraform directory
+VPC: Created VPC, subnets, and NAT Gateway.
+EKS Cluster: EKS cluster and worker nodes.
 
-simply apply them
-```bash
- kubectl apply -f deployement.yaml
+Step 7: Deploy the Application to EKS
+
+Apply Kubernetes Manifests:
+kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 
-After that, fetch the URL, simply by typing this
 
-```bash
+Get the LoadBalancer URL:
 kubectl get svc
- you will get
-```bash
-NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+
+Example output:
+NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP                              PORT(S)        AGE
 simpletime-service    LoadBalancer   10.100.200.200  a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com  80:30777/TCP   10m
 
- paste it in the web browser, you will get the json response.
 
-```bash
-### -------------------------------------------------------------------------------
+Access the Application:
+
+Copy the EXTERNAL-IP (LoadBalancer URL) and paste it into a web browser.
+
+Expected JSON response:
 {
   "timestamp": "2025-04-14T21:15:43.000000+05:30",
   "ip": "127.0.0.1"
 }
-###----------------------------------------------------------------------------------
 
 
+
+
+
+Notes
+
+Ensure your AWS credentials have sufficient permissions for creating and managing resources.
+The Docker image is publicly available on Docker Hub for convenience.
+For production, secure the S3 bucket and EKS cluster with appropriate IAM roles and policies.
 
