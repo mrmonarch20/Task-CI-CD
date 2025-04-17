@@ -1,4 +1,4 @@
-# Task Repository
+# Task  Repository
 
 This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
 
@@ -73,6 +73,10 @@ git clone https://github.com/mrmonarch20/Task-CI-CD.git
    ```
    > **Note**: The Docker image has been pushed to a public repository on Docker Hub.
 
+4. **Verify the Application**:
+   - Open a browser and navigate to `http://localhost:5000/` to confirm the Flask application is running.
+   - You can also check a specific endpoint like `/health` for a health check.
+
 ---
 
 ## Terraform Infrastructure Setup
@@ -136,13 +140,16 @@ aws s3api put-bucket-versioning --bucket <your-bucket-name> --versioning-configu
 
 ### Configure the Remote Backend
 Update the `backend.tf` file to configure the remote backend:
-```hcl
+```hcl name=backend.tf
 terraform {
   backend "s3" {
     bucket         = "<your-bucket-name>"
     key            = "terraform/state"
     region         = "ap-south-1"
     encrypt        = true
+
+    # Option to use lock_file instead of DynamoDB for state locking
+    lock_file = true
   }
 }
 ```
@@ -197,15 +204,21 @@ kubectl get nodes
 ## Step 7: Deploy the Application into the EKS Cluster
 
 Apply the deployment and service YAML files:
-```bash
-kubectl apply -f deployment.yaml
-kubectl apply -f service.yaml
-```
 
-After that, fetch the LoadBalancer URL using:
-```bash
-kubectl get svc
-```
+1. Apply the Deployment configuration:
+   ```bash
+   kubectl apply -f deployment.yaml
+   ```
+
+2. Apply the Service configuration to expose the application:
+   ```bash
+   kubectl apply -f service.yaml
+   ```
+
+3. Fetch the LoadBalancer URL using:
+   ```bash
+   kubectl get svc
+   ```
 
 Example output:
 ```plaintext
@@ -223,4 +236,9 @@ Paste the `EXTERNAL-IP` in the web browser to get the JSON response.
 }
 ```
 
---- 
+
+---
+
+## Contact
+
+For questions or feedback, contact [mrmonarch20](https://github.com/mrmonarch20).
