@@ -187,4 +187,12 @@ project Structure
 
 
 |---app
+ -|--Dockerfile
+  |--app.py
+  |--requirements.txt
 |--terraform
+  -|--main.tf
+   |--outputs.tf
+   |--variables.tf
+   |--deployment.yaml
+   |--service.yaml
