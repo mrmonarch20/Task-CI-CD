@@ -90,32 +90,4 @@ jobs:
         working-directory: terraform
         run: terraform apply -auto-approve
 
-  kubernetes-deploy:
-    name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
-
-      - name: Configure kubeconfig
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: |
-          aws eks --region us-east-1 update-kubeconfig --name simpletime-eks
-
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f terraform/deployment.yaml
-          kubectl apply -f terraform/service.yaml
-
-      - name: Verify Deployment
-        run: |
-          kubectl get pods
-          kubectl get svc
+  
