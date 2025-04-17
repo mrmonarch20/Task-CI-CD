@@ -195,7 +195,7 @@ Once the infrastructure is deployed, verify the resources in the AWS Management 
 ### Accessing the Cluster
 To access the cluster, use this command:
 ```bash
-aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+aws eks --region ap-south-1 update-kubeconfig --name my-eks-cluster
 kubectl get nodes
 ```
 
