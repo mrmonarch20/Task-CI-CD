@@ -90,4 +90,12 @@ jobs:
         working-directory: terraform
         run: terraform apply -auto-approve
 
+      - name: Wait for 30 seconds
+        run: sleep 30
+
+      - name: Terraform Destroy (Cleanup)
+        if: always()
+        working-directory: terraform
+        run: terraform destroy -auto-approve
+
   
