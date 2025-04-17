@@ -29,8 +29,8 @@ jobs:
 
       - name: Run Tests
         run: |
-          # Placeholder for actual tests
           echo "Running tests..."
+          # Add actual test commands here
 
   docker-deploy:
     name: Build and Push Docker Image
@@ -58,6 +58,19 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y awscli
+          aws --version
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -94,7 +107,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+          aws eks --region ap-south-1 update-kubeconfig --name my-eks-cluster
 
       - name: Deploy to Kubernetes
         run: |
