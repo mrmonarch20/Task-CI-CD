@@ -1,116 +1,111 @@
-# Task-CI-CD
-# Task-CI-CD Repository
+Task-CI-CD Repository
+This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker and deploy infrastructure using Terraform.
+Clone the Repository
+git clone https://github.com/mrmonarch20/Task-CI-CD.git
 
-This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
-
-
-## Clone the repository
-
-```bash
-   git clone https://github.com/mrmonarch20/Task-CI-CD.git
-
-## Project Structure
-
+Project Structure
 The repository is organized as follows:
+Task-CI-CD/
+├── app/
+│   ├── app.py
+│   ├── requirements.txt
+│   └── Dockerfile
+├── terraform/
+│   ├── backend.tf
+│   ├── deployment.yaml
+│   └── service.yaml
+└── README.md
 
-## Steps Performed in This Repository
+Steps Performed in This Repository
 
-1. **Created the `app` Directory**:
-   - All application-related files are stored in the `app` directory for better organization.
+Created the app Directory:
 
-2. **Added the `app.py` File**:
-   - This file contains the main Flask application code.
-
-3. **Created the `requirements.txt` File**:
-   - This file lists the Python dependencies required for the application:
-     ```
-     Flask==2.3.3
-     pytz==2024.1
-     ```
-
-4. **Built a Docker Image**:
-   - A `Dockerfile` was created to containerize the Flask application. The Docker image ensures the application runs consistently across different environments.
-
-## How to Run the Application
-
-### Prerequisites
-- Install [Docker](https://www.docker.com/).
-
-### Steps to Run
-1. **Build the Docker Image**:
-   Run the following command in the terminal:
-   ```bash
-   docker build -t flask-app .
-
-2. **Run the Docker image to create container**:
-   ```bash
-   docker run -p 5000:5000 flask-app
+All application-related files are stored in the app directory for better organization.
 
 
-3. **You can pull the docker image
-   ```bash
-   docker pull raja7977/app
+Added the app.py File:
 
-   Note: Docker image pushed to docker hub public repository
+This file contains the main Flask application code.
 
 
-   ###Terraform Infrastructure Setup###
+Created the requirements.txt File:
 
-This guide explains how to set up the Terraform infrastructure for the project, including installing the required tools, configuring the AWS CLI, setting up a remote backend, and deploying the infrastructure.
+Lists the Python dependencies required for the application:Flask==2.3.3
+pytz==2024.1
 
----
 
-## Prerequisites
 
-1. **AWS CLI**: Ensure the AWS CLI is installed and configured.
-2. **Terraform**: Install Terraform CLI.
-3. **AWS Account**: You need an AWS account with sufficient permissions to create resources.
 
----
+Built a Docker Image:
 
-## Step 1: Install AWS CLI and Terraform
+A Dockerfile was created to containerize the Flask application, ensuring consistent execution across environments.
 
-### Install AWS CLI
-Follow the [AWS CLI installation guide](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) for your operating system.
 
+
+How to Run the Application
+Prerequisites
+
+Install Docker.
+
+Steps to Run
+
+Build the Docker Image:
+docker build -t flask-app .
+
+
+Run the Docker Container:
+docker run -p 5000:5000 flask-app
+
+
+Pull the Docker Image (Optional):
+docker pull raja7977/app
+
+
+Note: The Docker image is available in a public Docker Hub repository.
+
+
+
+Terraform Infrastructure Setup
+This section explains how to set up the Terraform infrastructure for the project, including installing tools, configuring the AWS CLI, setting up a remote backend, and deploying the infrastructure.
+Prerequisites
+
+AWS CLI: Ensure the AWS CLI is installed and configured.
+Terraform: Install the Terraform CLI.
+AWS Account: An AWS account with sufficient permissions to create resources.
+
+Step 1: Install AWS CLI and Terraform
+Install AWS CLI
+Follow the AWS CLI installation guide for your operating system.
 Verify the installation:
-```bash
 aws --version
 
-
-Install Terraform.  ---> Verify Installation
-
-```bash
+Install Terraform
+Follow the Terraform installation guide.
+Verify the installation:
 terraform -version
 
-## Step 2: Configure AWS CLI
-
-```bash
+Step 2: Configure AWS CLI
+Configure the AWS CLI with your credentials:
 aws configure
+
+Provide the following:
+
 AWS Access Key ID
 AWS Secret Access Key
 Default region (e.g., ap-south-1)
 Default output format (e.g., json)
 
-## Step 3: Set Up the Remote Backend
-
+Step 3: Set Up the Remote Backend
 Create an S3 Bucket for Remote Backend
-Run the following commands to create an S3 bucket for storing the Terraform state file:
-
-```bash
+Create an S3 bucket to store the Terraform state file:
 aws s3api create-bucket --bucket <your-bucket-name> --region ap-south-1 --create-bucket-configuration LocationConstraint=ap-south-1
 
-Replace <your-bucket-name> with a unique name for your bucket.
-
+Replace <your-bucket-name> with a unique bucket name.
 Enable versioning for the bucket:
-
-```bash
 aws s3api put-bucket-versioning --bucket <your-bucket-name> --versioning-configuration Status=Enabled
 
-
 Configure the Remote Backend
-Update the backend.tf file to configure the remote backend:
-
+Update the backend.tf file in the terraform directory to configure the remote backend:
 terraform {
   backend "s3" {
     bucket         = "<your-bucket-name>"
@@ -120,71 +115,47 @@ terraform {
   }
 }
 
- ## Step 4: Initialize Terraform
+Step 4: Initialize Terraform
 Navigate to the terraform directory:
-
-
-```bash
 cd terraform
 
-Initialize Terraform to download the required providers and configure the backend:
-```bash
+Initialize Terraform to download providers and configure the backend:
 terraform init
 
-## Step 5: Deploy the Infrastructure
+Step 5: Deploy the Infrastructure
 Plan the Infrastructure
-Run the following command to see the changes Terraform will make:
-
-```bash
+Preview the changes Terraform will make:
 terraform plan
 
 Apply the Infrastructure
 Deploy the infrastructure:
-
-```bash
 terraform apply -auto-approve
 
-## Step 6: Verify the Infrastructure
-Once the infrastructure is deployed, verify the resources in the AWS Management Console:
+Step 6: Verify the Infrastructure
+After deployment, verify the resources in the AWS Management Console:
 
 VPC: Check the created VPC, subnets, and NAT Gateway.
 EKS Cluster: Verify the EKS cluster and worker nodes.
 
-Accessing the cluster:- To acess the cluster,use this command
-```bash
+To access the cluster:
 aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
 kubectl get nodes
 
-## Step7: Deploy the appliaction into eks cluster and then access it via loadbalancer url
-
- Files stored in terraform directory
-
-simply apply them
-```bash
- kubectl apply -f deployement.yaml
+Step 7: Deploy the Application to the EKS Cluster
+Deploy the application using the provided Kubernetes manifests:
+kubectl apply -f deployment.yaml
 kubectl apply -f service.yaml
 
-After that, fetch the URL, simply by typing this
-
-```bash
+Retrieve the LoadBalancer URL:
 kubectl get svc
- you will get
-```bash
-NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)        AGE
+
+Example output:
+NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP                              PORT(S)        AGE
 simpletime-service    LoadBalancer   10.100.200.200  a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com  80:30777/TCP   10m
 
- paste it in the web browser, you will get the json response.
-
-```bash
-### -------------------------------------------------------------------------------
+Paste the EXTERNAL-IP (e.g., a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com) into a web browser to access the application. You should see a JSON response like:
 {
   "timestamp": "2025-04-14T21:15:43.000000+05:30",
   "ip": "127.0.0.1"
 }
-###----------------------------------------------------------------------------------
 
-project Structure
-
-
-|---app
-|--terraform
