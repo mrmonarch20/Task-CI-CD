@@ -1,4 +1,4 @@
-# Task-CI-CD Repository
+# Task Repository
 
 This repository contains a simple Flask application setup, including the necessary files and instructions to run the application using Docker.
 
