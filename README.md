@@ -223,7 +223,7 @@ Apply the deployment and service YAML files:
 Example output:
 ```plaintext
 NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP                                         PORT(S)        AGE
-simpletime-service    LoadBalancer   10.100.200.200  a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com  80:30777/TCP   10m
+simpletime-service    LoadBalancer   10.100.200.200  a1b2c3d4e5f6g7h8-1234567890.ap-south-1.elb.amazonaws.com  5000:31301/TCP   10m
 ```
 
 Paste the `EXTERNAL-IP` in the web browser to get the JSON response.
