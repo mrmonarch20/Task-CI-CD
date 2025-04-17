@@ -150,6 +150,11 @@ Once the infrastructure is deployed, verify the resources in the AWS Management 
 VPC: Check the created VPC, subnets, and NAT Gateway.
 EKS Cluster: Verify the EKS cluster and worker nodes.
 
+Accessing the cluster:- To acess the cluster,use this command
+```bash
+aws eks --region us-east-1 update-kubeconfig --name my-eks-cluster
+kubectl get nodes
+
 ## Step7: Deploy the appliaction into eks cluster and then access it via loadbalancer url
 
  Files stored in terraform directory
