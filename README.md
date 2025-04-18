@@ -200,7 +200,38 @@ kubectl get nodes
 ```
 
 ---
+## Accessing the EKS Cluster from Outside the VPC
 
+If you are accessing the EKS cluster from outside the VPC, follow these steps:
+
+### Check EKS Endpoint Configuration:
+```bash
+aws eks describe-cluster --region ap-south-1 --name <cluster_name> --query "cluster.resourcesVpcConfig"
+```
+-Replace <cluster_name> with your EKS cluster name.
+-Ensure endpointPublicAccess is set to true and endpointPrivateAccess is set to false.
+
+Update EKS Endpoint to Public:
+```bash
+aws eks update-cluster-config --region ap-south-1
+```
+Find the Security Group Attached to the EKS Cluster:
+```bash
+aws eks describe-cluster --region ap-south-1 --name <cluster_name> --query "cluster.resourcesVpcConfig.clusterSecurityGroupId"
+```
+Allow Inbound Traffic on Port 443:
+```bash
+aws ec2 authorize-security-group-ingress --group-id <security-group-id> --protocol tcp --port 443 --cidr 0.0.0.0/0
+```
+Verify the Security Group Rules:
+```bash
+aws ec2 describe-security-groups --group-ids <security-group-id> --query "SecurityGroups[0].IpPermissions"
+```
+Test the EKS Cluster:
+```bash
+kubectl get nodes
+```
+---
 ## Step 7: Deploy the Application into the EKS Cluster
 
 Apply the deployment and service YAML files:
