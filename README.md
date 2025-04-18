@@ -213,7 +213,7 @@ aws eks describe-cluster --region ap-south-1 --name <cluster_name> --query "clus
 
 Update EKS Endpoint to Public:
 ```bash
-aws eks update-cluster-config --region ap-south-1
+aws eks update-cluster-config --region ap-south-1 --name <cluster-name> --resources-vpc-config endpointPublicAccess=true
 ```
 Find the Security Group Attached to the EKS Cluster:
 ```bash
